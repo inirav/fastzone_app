@@ -18,6 +18,11 @@ class HomePage extends StatelessWidget {
           if (controller.categoryLoader.value) {
               return const Center(child: CircularProgressIndicator());
           }
+          if (controller.categoriesList.isEmpty) {
+            return Center(
+              child: Text('No categories found', style: AppTheme.head2,),
+            );
+          }
           return ListView.separated(
             physics: const BouncingScrollPhysics(),
             itemCount: controller.categoriesList.length,

@@ -22,6 +22,11 @@ class ServicesPage extends StatelessWidget {
           if (controller.serviceLoader.value) {
               return const Center(child: CircularProgressIndicator());
           }
+          if (controller.serviceList.isEmpty) {
+            return Center(
+              child: Text('No services found', style: AppTheme.head2,),
+            );
+          }
           return ListView.separated(
             physics: const BouncingScrollPhysics(),
             itemCount: controller.serviceList.length,

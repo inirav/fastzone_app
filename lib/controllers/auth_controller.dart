@@ -51,18 +51,19 @@ class AuthController extends GetxController {
       if (data.user != null) {
           debugPrint('user is ${data.user}');
           debugPrint('User Credentials');
-          if (data.user != null) {
-            authLoader(false);
-            LocalX.setId(user?.value.id ?? 0);  
-            LocalX.setFirstName(user?.value.firstName ?? '');  
-            LocalX.setLastName(user?.value.lastName ?? '');  
-            LocalX.setEmail(user?.value.email ?? '');  
-            LocalX.setPhone(user?.value.phone ?? '');
+          authLoader(false);
+            LocalX.setId(user.value.id);  
+            LocalX.setFirstName(user.value.firstName);  
+            LocalX.setLastName(user.value.lastName);  
+            LocalX.setEmail(user.value.email);  
+            LocalX.setPhone(user.value.phone);
             Get.offAll(() => Home());  
-          } else {
-            authLoader(false);
-            debugPrint('User login empty');
-          }
+          // if (user) {
+            
+          // } else {
+          //   authLoader(false);
+          //   debugPrint('User login empty');
+          // }
       } else {
         authOtpLoader(false);
         debugPrint('CANT SIGNIN WITH FIREBASE');
@@ -77,7 +78,7 @@ class AuthController extends GetxController {
     }
   }
 
-  Rx<Customer>? user;
+  Rx<Customer> user = Rx<Customer>(Customer(id: 0, firstName: '', lastName: '', email: '', phone: '', address: '', addressType: '', city: '', locality: '', pincode: 0));
   Future checkCustomer(String phone) async {
     try {
       authLoader(true);
@@ -86,7 +87,8 @@ class AuthController extends GetxController {
       if (data != null) {
         if (data['status'] == true) {
           customer = Customer.fromJson(data['data']);  
-          user?.value = customer;
+          user.value = customer;
+          debugPrint('customer json data ${customer.firstName}');
           if (int.parse(phone) == 9898685149) {
             authLoader(false);
             LocalX.setId(customer.id);  

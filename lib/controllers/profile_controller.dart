@@ -1,3 +1,4 @@
+import 'package:fastzone/data/hive.dart';
 import 'package:fastzone/models/models.dart';
 import 'package:fastzone/services/api_client.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,7 @@ class ProfileController extends GetxController {
   @override
   void onReady() async {
     super.onReady();
-    await fetchIssues(1);
+    await fetchIssues(LocalX.customerId ?? 0);
   }
 
 

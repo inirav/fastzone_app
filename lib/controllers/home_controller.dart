@@ -67,7 +67,7 @@ class HomeController extends GetxController {
   }
 
 
-  Future addIssue(String title, String desc, int serviceId, int customerId, dynamic assets) async {
+  Future addIssue(String title, String desc, int serviceId, int customerId, List<Asset> assets) async {
     try {
       var files = await convertAssetToFile(media: assets); 
       var data = await ApiClient.raiseIssue(title, desc, serviceId, customerId, files);

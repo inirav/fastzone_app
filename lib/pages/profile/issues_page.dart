@@ -1,4 +1,5 @@
 import 'package:fastzone/controllers/profile_controller.dart';
+import 'package:fastzone/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,6 +13,14 @@ class IssuePage extends StatelessWidget {
       body: GetX<ProfileController>(
         init: ProfileController(),
         builder: (controller) {
+          if (controller.issueLoader.value) {
+              return const Center(child: CircularProgressIndicator());
+          }
+          if (controller.issueList.isEmpty) {
+            return Center(
+              child: Text('No issues found', style: AppTheme.head2,),
+            );
+          }
           return ListView.separated(
             physics: const BouncingScrollPhysics(),
             itemCount: controller.issueList.length,

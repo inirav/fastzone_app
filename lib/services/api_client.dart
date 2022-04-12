@@ -65,8 +65,8 @@ class ApiClient {
         var request = http.MultipartRequest("POST", Uri.parse(Connection.addIssue))
         ..fields['title'] = title
         ..fields['desc'] = desc
-        ..fields['serviceId'] = '$serviceId'
-        ..fields['customerId'] = '$customerId';
+        ..fields['service_id'] = '$serviceId'
+        ..fields['customer_id'] = '$customerId';
 
       for (File file in files) {
         String? fileName = file.path.split("/").last;
@@ -81,12 +81,12 @@ class ApiClient {
           final responseData = await http.Response.fromStream(response);
           debugPrint('response ${responseData.body}');
           var result = jsonDecode(responseData.body);
-          var status = result['status'];
-          if (status == true) {
-            return result['msg'];
-          } else {
-            return 'false';
-          }
+          return result;
+          // if (status == true) {
+          //   return result['msg'];
+          // } else {
+          //   return 'false';
+          // }
         } else {
           final responseData = await http.Response.fromStream(response);
           var result = jsonDecode(responseData.body);
