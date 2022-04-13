@@ -8,6 +8,58 @@ import 'package:fastzone/models/models.dart';
 
 class ApiClient {
 
+  static Future addCustomer(String firstName, String lastName,
+     String email, String phone, String type, String address, String locality, 
+     String city, String pincode) async {
+    try {
+        var response = await http.post(Uri.parse(Connection.addCustomer), body: {
+          'first_name': firstName,
+          'last_name': lastName,
+          'email': email,
+          'phone': phone,
+          'type': type,
+          'address': address,
+          'locality': locality,
+          'city': city,
+          'pincode': pincode,
+        });
+        if (response.statusCode >= 200 || response.statusCode <= 299) {
+          var result = json.decode(response.body);
+          return result;
+        }  
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+
+  static Future editCustomer(int customerId, String firstName, String lastName,
+     String email, String phone, String type, String address, String locality, 
+     String city, String pincode) async {
+    try {
+        var response = await http.post(Uri.parse(Connection.editCustomer), body: {
+          'customer_id': '$customerId',
+          'first_name': firstName,
+          'last_name': lastName,
+          'email': email,
+          'phone': phone,
+          'type': type,
+          'address': address,
+          'locality': locality,
+          'city': city,
+          'pincode': pincode,
+        });
+        if (response.statusCode >= 200 || response.statusCode <= 299) {
+          var result = json.decode(response.body);
+          debugPrint('result is $result');
+          return result;
+        }  
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+
   static Future checkCustomer(String phone) async {
     try {
       var response = await http.post(Uri.parse(Connection.checkCustomer), body: {
@@ -82,11 +134,6 @@ class ApiClient {
           debugPrint('response ${responseData.body}');
           var result = jsonDecode(responseData.body);
           return result;
-          // if (status == true) {
-          //   return result['msg'];
-          // } else {
-          //   return 'false';
-          // }
         } else {
           final responseData = await http.Response.fromStream(response);
           var result = jsonDecode(responseData.body);
@@ -120,22 +167,19 @@ class ApiClient {
   }
 
 
-  // static Future raiseIssue(String title, String desc, int serviceId, int customerId) async {
-  //   try {
-  //       var response = await http.post(Uri.parse(Connection.addIssue), body: {
-  //         'title': title,
-  //         'desc': desc,
-  //         'service_id': '$serviceId',
-  //         'customer_id': '$customerId',
-  //       });
-  //       if (response.statusCode >= 200 || response.statusCode <= 299) {
-  //         var result = json.decode(response.body);
-  //         return result;
-  //       }  
-  //   } on Exception catch (e) {
-  //     debugPrint(e.toString());
-  //   }
-  // }
+  static Future deleteIssue(int issueId) async {
+    try {
+        var response = await http.post(Uri.parse(Connection.deleteIssue), body: {
+          'id': '$issueId'
+        });
+        if (response.statusCode >= 200 || response.statusCode <= 299) {
+          var result = json.decode(response.body);
+          return result;
+        }  
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+    }
+  }
 
 
 }

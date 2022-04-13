@@ -31,4 +31,23 @@ class ProfileController extends GetxController {
     }
   }
 
+  Future deleteIssue(int issueId) async {
+    try { 
+      var data = await ApiClient.deleteIssue(issueId);
+      if (data != null) {
+         if (data['status'] == true) {
+            Get.defaultDialog(title: 'Issue Deleted', middleText: 'Issue has been deleted successfully.',
+              onConfirm: () {
+                Get.back();
+              });
+         } else {
+            Get.defaultDialog(title: 'Deletion Failed', 
+                middleText: 'Failed to delete an issue. Please trya again later.');
+         }
+      }
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
 }

@@ -23,7 +23,7 @@ class Customer {
     String address;
     String locality;
     String city;
-    int pincode;
+    String pincode;
 
     factory Customer.fromJson(Map<String, dynamic> json) => Customer(
         id: json["id"],

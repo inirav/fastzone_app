@@ -1,5 +1,6 @@
 import 'package:fastzone/data/hive.dart';
 import 'package:fastzone/pages/auth/login_page.dart';
+import 'package:fastzone/pages/profile/edit_profile_page.dart';
 import 'package:fastzone/pages/profile/issues_page.dart';
 import 'package:fastzone/utils/theme.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,7 @@ class ProfilePage extends StatelessWidget {
             Text('${LocalX.firstName} ${LocalX.lastName}', style: const TextStyle(fontSize: 24, 
                 fontWeight: FontWeight.w500),),
             const SizedBox(height: 6),
-            Text('${LocalX.customerEmail}', style: const TextStyle(
+            Text('${LocalX.email}', style: const TextStyle(
                 color: Colors.black54, fontSize: 18),),
             const SizedBox(height: 6),
             const Divider(thickness: 1.5, color: AppColors.redColor),
@@ -89,7 +90,9 @@ class ProfileListView extends StatelessWidget {
           ),
           trailing: const Icon(Icons.chevron_right, color: Colors.grey),
           onTap: () {
-            if (i == 1) {
+            if (i == 0) {
+              Get.to(() => const EditProfilePage());
+            } else if (i == 1) {
               Get.to(() => const IssuePage());
             } else if (i == 5) {
               LocalX.userBox().clear();

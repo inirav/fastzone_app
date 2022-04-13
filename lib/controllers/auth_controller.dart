@@ -1,8 +1,8 @@
 import 'package:fastzone/data/hive.dart';
 import 'package:fastzone/main.dart';
 import 'package:fastzone/pages/auth/otp_page.dart';
+import 'package:fastzone/pages/profile/register_page.dart';
 import 'package:fastzone/services/api_client.dart';
-import 'package:fastzone/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -49,7 +49,7 @@ class AuthController extends GetxController {
       authOtpLoader(true);
       var data = await authInstance.signInWithCredential(credential);
       if (data.user != null) {
-          debugPrint('user is ${data.user}');
+          debugPrint('user is ${user.value.firstName}');
           debugPrint('User Credentials');
           authLoader(false);
             LocalX.setId(user.value.id);  
@@ -57,7 +57,12 @@ class AuthController extends GetxController {
             LocalX.setLastName(user.value.lastName);  
             LocalX.setEmail(user.value.email);  
             LocalX.setPhone(user.value.phone);
-            Get.offAll(() => Home());  
+            LocalX.setAddressType(user.value.addressType);
+            LocalX.setAddress(user.value.address);
+            LocalX.setLocality(user.value.locality);
+            LocalX.setCity(user.value.city);
+            LocalX.setPincode(user.value.pincode);
+            Get.offAll(() => Home());   
           // if (user) {
             
           // } else {
@@ -68,7 +73,6 @@ class AuthController extends GetxController {
         authOtpLoader(false);
         debugPrint('CANT SIGNIN WITH FIREBASE');
       }
-      
     } on FirebaseAuthException {
       authOtpLoader(false);
       debugPrint('FIREBASE AUTH EXCEPTION');
@@ -78,7 +82,9 @@ class AuthController extends GetxController {
     }
   }
 
-  Rx<Customer> user = Rx<Customer>(Customer(id: 0, firstName: '', lastName: '', email: '', phone: '', address: '', addressType: '', city: '', locality: '', pincode: 0));
+  Rx<Customer> user = Rx<Customer>(Customer(id: 0, firstName: '', lastName: '', 
+      email: '', phone: '', address: '', addressType: '', city: '', locality: '',
+      pincode: ''));
   Future checkCustomer(String phone) async {
     try {
       authLoader(true);
@@ -96,14 +102,20 @@ class AuthController extends GetxController {
             LocalX.setLastName(customer.lastName);  
             LocalX.setEmail(customer.email);  
             LocalX.setPhone(customer.phone);
+            LocalX.setAddressType(customer.addressType);
+            LocalX.setAddress(customer.address);
+            LocalX.setLocality(customer.locality);
+            LocalX.setCity(customer.city);
+            LocalX.setPincode(customer.pincode);
             Get.offAll(() => Home());  
           } else {
             await verifyNumber(phone);
           }
         } else {
           authLoader(false);
-          AppSnackBar.defaultSnackBar(title: 'Invalid User', message: "${data['error']}",
-              duration: 3);
+          Get.to(() => RegisterPage(phone: phone));
+          // AppSnackBar.defaultSnackBar(title: 'Invalid User', message: "${data['error']}",
+          //     duration: 3);
         }
       } else {
         authLoader(false);
@@ -112,6 +124,64 @@ class AuthController extends GetxController {
       debugPrint(e.toString());
     }
   }
+
+  Future addCustomer(String firstName, String lastName,
+     String email, String phone, String type, String address, String locality, 
+     String city, String pincode) async {
+    try {
+      var data = await ApiClient.addCustomer(firstName, lastName, email, phone, type, address, locality, city, pincode);
+      if (data != null) {
+         if (data['status'] == true) {
+            LocalX.setId(data['data']['id']);
+            LocalX.setFirstName(data['data']['first_name']);  
+            LocalX.setLastName(data['data']['last_name']);  
+            LocalX.setEmail(data['data']['email']);  
+            LocalX.setPhone(data['data']['phone']);
+            LocalX.setAddressType(data['data']['address_type']);
+            LocalX.setAddress(data['data']['address']);
+            LocalX.setLocality(data['data']['locality']);
+            LocalX.setCity(data['data']['city']);
+            LocalX.setPincode(data['data']['pincode']);
+            await verifyNumber(phone);
+         } else {
+            Get.defaultDialog(title: 'Registration Failed', 
+                middleText: 'Failed to register. Please try again later.');
+         }
+      }
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+    }
+  }
   
+
+  Future editCustomer(int customerId, String firstName, String lastName,
+    String email, String phone, String type, String address, String locality, 
+    String city, String pincode) async {
+    try {
+      var data = await ApiClient.editCustomer(customerId, firstName, lastName, email, phone, type, address, locality, city, pincode);
+      if (data != null) {
+        if (data['status'] == true) {
+            LocalX.setFirstName(firstName);  
+            LocalX.setLastName(lastName);  
+            LocalX.setEmail(email);  
+            LocalX.setPhone(phone);
+            LocalX.setAddressType(type);
+            LocalX.setAddress(address);
+            LocalX.setLocality(locality);
+            LocalX.setCity(city);
+            LocalX.setPincode(pincode);
+            Get.defaultDialog(title: 'Profile Updated', middleText: 'Profile has been updated successfully.', 
+              onConfirm: () {
+                Get.back();
+              });
+        } else {
+            Get.defaultDialog(title: 'Update Failed', 
+                middleText: 'Failed to update profile. Please try again later.');
+         }
+      }
+    } on Exception catch (e) {
+      debugPrint(e.toString());
+    }
+  }
 
 }

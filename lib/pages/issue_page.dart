@@ -38,67 +38,65 @@ class _IssuePageState extends State<IssuePage> {
       appBar: AppBar(title: Text(widget.service)),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
-          child: Form(key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 20,),
-                Text('Issue Title', style: Theme.of(context).textTheme.headline6,),
-                const SizedBox(height: 8,),
-                TextFormField(
-                  controller: _titleController,
-                  validator: Validator.validateRequired,
-                  style: const TextStyle(color: Colors.black87),
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-                    hintText: 'Issue Title',
-                    hintStyle: AppTheme.head1,
-                    border: const OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 30,),
-                Text('Issue Description', style: Theme.of(context).textTheme.headline6,),
-                const SizedBox(height: 8,),
-                TextFormField(maxLines: 7,
-                controller: _descController,
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
+        child: Form(key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 20,),
+              Text('Issue Title', style: Theme.of(context).textTheme.headline6,),
+              const SizedBox(height: 8,),
+              TextFormField(
+                controller: _titleController,
+                validator: Validator.validateRequired,
+                style: const TextStyle(color: Colors.black87),
                 decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    hintText: 'Issue Description', hintStyle: AppTheme.head1,
-                    border: const OutlineInputBorder(),
-                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                  hintText: 'Issue Title',
+                  hintStyle: AppTheme.head1,
+                  border: const OutlineInputBorder(),
                 ),
-                const SizedBox(height: 15,),
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Add Images', style: Theme.of(context).textTheme.headline6,), 
-                    ElevatedButton.icon(icon: const Icon(Icons.add), 
-                     label: Text('Add', style: AppTheme.head2,), 
-                      style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith((states) {
-                        if (states.contains(MaterialState.pressed)) {
-                            return AppColors.redColor;
-                          }
+              ),
+              const SizedBox(height: 30,),
+              Text('Issue Description', style: Theme.of(context).textTheme.headline6,),
+              const SizedBox(height: 8,),
+              TextFormField(maxLines: 7,
+              controller: _descController,
+              decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  hintText: 'Issue Description', hintStyle: AppTheme.head1,
+                  border: const OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 15,),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Add Images', style: Theme.of(context).textTheme.headline6,), 
+                  ElevatedButton.icon(icon: const Icon(Icons.add), 
+                   label: Text('Add', style: AppTheme.head2,), 
+                    style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith((states) {
+                      if (states.contains(MaterialState.pressed)) {
                           return AppColors.redColor;
-                      })),
-                      onPressed: () {
-                        _pickImages();
-                      },),
-                  ],
-                ),
-                const SizedBox(height: 12,),
-                _imagesGridView(),
-                const SizedBox(height: 20,),
-                SizedBox(width: double.infinity,
-                  child: CupertinoButton(
-                    color: AppColors.redColor,
-                    child: Text('Raise Issue', style: AppTheme.head1),
+                        }
+                        return AppColors.redColor;
+                    })),
                     onPressed: () {
-                      homeController.addIssue(_titleController.text, _descController.text, widget.serviceId, LocalX.customerId ?? 0, _images);
-                    }),
-                ),
-              ],
-            ),
+                      _pickImages();
+                    },),
+                ],
+              ),
+              const SizedBox(height: 12,),
+              _imagesGridView(),
+              const SizedBox(height: 20,),
+              SizedBox(width: double.infinity,
+                child: CupertinoButton(
+                  color: AppColors.redColor,
+                  child: Text('Raise Issue', style: AppTheme.head1),
+                  onPressed: () {
+                    homeController.addIssue(_titleController.text, _descController.text, widget.serviceId, LocalX.customerId ?? 0, _images);
+                  }),
+              ),
+            ],
           ),
         ),
       ),

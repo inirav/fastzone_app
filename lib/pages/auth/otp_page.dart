@@ -24,15 +24,12 @@ class _OtpPageState extends State<OtpPage> {
   @override
   void initState() {
     super.initState();
-    _listenForCode();  
-  }
-
-  _listenForCode() {
     SmsAutoFill().listenForCode;
   }
 
   @override
   void dispose() {
+    SmsAutoFill().unregisterListener();
     _otpController.dispose();
     super.dispose();
   }
@@ -69,26 +66,6 @@ class _OtpPageState extends State<OtpPage> {
                   data: ThemeData(primaryColor: AppColors.redColor),
                   child: Column(crossAxisAlignment: CrossAxisAlignment.end,
                     children: <Widget>[
-                      // TextFormField(
-                      //   controller: _otpController,
-                      //   validator: Validator.validateRequired,
-                      //   keyboardType: TextInputType.number,
-                      //   inputFormatters: [
-                      //     FilteringTextInputFormatter.digitsOnly,
-                      //     LengthLimitingTextInputFormatter(6),
-                      //   ],
-                      //   style: const TextStyle(color: Colors.black87),
-                      //   decoration: const InputDecoration(
-                      //     labelText: 'Confirmation code',
-                      //     labelStyle: TextStyle(color: Colors.black87),
-                      //     border: UnderlineInputBorder(
-                      //       borderSide: BorderSide(color: Colors.black87),
-                      //     ),
-                      //     enabledBorder: UnderlineInputBorder(
-                      //       borderSide: BorderSide(color: Colors.black87),
-                      //     ),
-                      //   ),
-                      // ),
                       const SizedBox(height: 28,),
                       Container(
                         margin: const EdgeInsets.symmetric(horizontal: 60),
@@ -108,17 +85,6 @@ class _OtpPageState extends State<OtpPage> {
                             );
                             _authController.signInWithCredentials(credential);
                           },
-                          // onCodeChanged: (val) {
-                          //   debugPrint(val);
-                          //   if (val!.length == 6) {
-                          //     final code = val.trim();
-                          //     PhoneAuthCredential credential = PhoneAuthProvider.credential(
-                          //       verificationId: widget.verificationId,
-                          //       smsCode: code,
-                          //     );
-                          //     _authController.signInWithCredentials(credential);
-                          //   }
-                          // },
                         ),
                       ),
                       const SizedBox(height: 26,),

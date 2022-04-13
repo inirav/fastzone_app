@@ -28,6 +28,15 @@ class IssuePage extends StatelessWidget {
               return ListTile(
                 title: Text(controller.issueList[i].title),
                 subtitle: Text(controller.issueList[i].status),
+                trailing: PopupMenuButton(
+                  child: const Icon(Icons.more_vert),
+                  itemBuilder: (c) => [
+                    const PopupMenuItem(child: Text('Delete'), value: 1),
+                  ],
+                  onSelected: (_) {
+                     controller.deleteIssue(controller.issueList[i].id); 
+                  },
+                ),
               );
             },
             separatorBuilder: (c, i) {
