@@ -31,11 +31,11 @@ class IssuePage extends StatelessWidget {
                 trailing: PopupMenuButton(
                   child: const Icon(Icons.more_vert),
                   itemBuilder: (c) => [
-                    const PopupMenuItem(child: Text('Delete'), value: 1),
+                    PopupMenuItem(child: const Text('Delete'), value: 1,
+                    onTap: () async {
+                     await controller.deleteIssue(controller.issueList[i].id); 
+                    },),
                   ],
-                  onSelected: (_) {
-                     controller.deleteIssue(controller.issueList[i].id); 
-                  },
                 ),
               );
             },

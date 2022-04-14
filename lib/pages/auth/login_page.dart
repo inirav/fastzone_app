@@ -1,7 +1,7 @@
 import 'package:fastzone/controllers/auth_controller.dart';
 import 'package:fastzone/utils/theme.dart';
 import 'package:fastzone/utils/validator.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:fastzone/widgets/buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({ Key? key }) : super(key: key);
-
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -79,15 +78,13 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         const SizedBox(height: 28,),
-                        SizedBox(width: double.infinity,
-                          child: CupertinoButton(color: AppColors.redColor,
-                            child: const Text('Continue'),
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
+                        MyButton(width: double.infinity, title: 'Continue',
+                          isLoading: _authController.authLoader.value, 
+                          onTap: () async {
+                            if (_formKey.currentState!.validate()) {
                                 await _authController.checkCustomer(_phoneController.text.trim());  
-                              }
-                            }),
-                        ),
+                            }
+                          }),
                         const SizedBox(height: 26,),
                       ],
                     ),

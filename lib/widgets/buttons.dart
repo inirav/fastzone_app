@@ -28,27 +28,27 @@ class MyButton extends StatelessWidget {
           ),
           decoration: BoxDecoration(
             color: color,
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(10),
           ),
           height: isLoading ? 50 : height,
           width: isLoading ? 50 : width,
-          margin: const EdgeInsets.only(left: 20, right: 20),
+          margin: const EdgeInsets.only(left: 4, right: 4),
           padding: const EdgeInsets.all(13),
           child: Center(
             child: isLoading
-                ? const Center(
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    ),
-                  )
-                : Text(
-                    isLoading ? "" : title,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
+              ? const Center(
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                   ),
+                )
+              : Text(
+                  isLoading ? "" : title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                    fontSize: 17,
+                  ),
+                ),
           ),
         ),
       ),

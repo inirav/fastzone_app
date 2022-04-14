@@ -15,7 +15,7 @@
 
    <application
         android:label="fastzone"
-        android:name="io.flutter.app.FlutterApplication"
+        android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
        tools:ignore="MissingClass">
         <activity

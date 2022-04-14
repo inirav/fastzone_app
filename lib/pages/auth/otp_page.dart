@@ -1,17 +1,16 @@
 import 'package:fastzone/controllers/auth_controller.dart';
 import 'package:fastzone/utils/theme.dart';
+import 'package:fastzone/widgets/buttons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 
 class OtpPage extends StatefulWidget {
   const OtpPage({ Key? key, required this.phone, required this.verificationId }) 
-    : super(key: key);
+  : super(key: key);
   final String phone;
   final String verificationId;
-
   @override
   State<OtpPage> createState() => _OtpPageState();
 }
@@ -89,20 +88,30 @@ class _OtpPageState extends State<OtpPage> {
                         ),
                       ),
                       const SizedBox(height: 26,),
-                      SizedBox(width: double.infinity,
-                        child: CupertinoButton(color: AppColors.redColor,
-                          child: const Text('Login'),
-                          onPressed: () {
-                            final code = _otpController.text.trim();
-                            PhoneAuthCredential credential =
-                                PhoneAuthProvider.credential(
-                              verificationId: widget.verificationId,
-                              smsCode: code,
-                            );
-                            _authController.signInWithCredentials(credential);
-                          }),
-                      ),
-                      const SizedBox(height: 26,),
+                      MyButton(width: double.infinity, title: 'Login',
+                        isLoading: _authController.authOtpLoader.value, 
+                        onTap: () {
+                          final code = _otpController.text.trim();
+                          PhoneAuthCredential credential =
+                              PhoneAuthProvider.credential(
+                            verificationId: widget.verificationId,
+                            smsCode: code,
+                          );
+                          _authController.signInWithCredentials(credential);
+                        }),
+                      // SizedBox(width: double.infinity,
+                      //   child: CupertinoButton(color: AppColors.redColor,
+                      //     child: const Text('Login'),
+                      //     onPressed: () {
+                      //       final code = _otpController.text.trim();
+                      //       PhoneAuthCredential credential =
+                      //           PhoneAuthProvider.credential(
+                      //         verificationId: widget.verificationId,
+                      //         smsCode: code,
+                      //       );
+                      //       _authController.signInWithCredentials(credential);
+                      //     }),
+                      // ),
                     ],
                   ),
                 ),

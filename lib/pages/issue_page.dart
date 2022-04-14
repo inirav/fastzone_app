@@ -2,7 +2,7 @@ import 'package:fastzone/controllers/home_controller.dart';
 import 'package:fastzone/data/hive.dart';
 import 'package:fastzone/utils/theme.dart';
 import 'package:fastzone/utils/validator.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:fastzone/widgets/buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
@@ -87,15 +87,22 @@ class _IssuePageState extends State<IssuePage> {
               ),
               const SizedBox(height: 12,),
               _imagesGridView(),
-              const SizedBox(height: 20,),
-              SizedBox(width: double.infinity,
-                child: CupertinoButton(
-                  color: AppColors.redColor,
-                  child: Text('Raise Issue', style: AppTheme.head1),
-                  onPressed: () {
-                    homeController.addIssue(_titleController.text, _descController.text, widget.serviceId, LocalX.customerId ?? 0, _images);
-                  }),
-              ),
+              const SizedBox(height: 30,),
+              MyButton(width: double.infinity, title: 'Raise Issue',
+                isLoading: homeController.addIssueLoader.value, onTap: () {
+                   homeController.addIssue(_titleController.text, _descController.text, 
+                    widget.serviceId, LocalX.customerId ?? 0, _images); 
+                }),
+              // const SizedBox(height: 35,),
+              // SizedBox(width: double.infinity,
+              //   child: CupertinoButton(
+              //     color: AppColors.redColor,
+              //     child: Text('Raise Issue', style: AppTheme.head1),
+              //     onPressed: () {
+              //       homeController.addIssue(_titleController.text, _descController.text, 
+              //         widget.serviceId, LocalX.customerId ?? 0, _images);
+              //     }),
+              // ),
             ],
           ),
         ),

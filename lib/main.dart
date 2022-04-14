@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-// ${applicationName}
+//  io.flutter.app.FlutterApplication
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -38,7 +38,7 @@ class Home extends StatelessWidget {
   Home({ Key? key }) : super(key: key);
   final RxInt _selectedIndex = RxInt(0);
   final _pageOptions = <Widget>[
-    const HomePage(),
+     HomePage(),
     const ProfilePage(),
   ];
 

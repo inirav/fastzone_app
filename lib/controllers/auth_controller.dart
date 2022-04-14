@@ -1,7 +1,7 @@
 import 'package:fastzone/data/hive.dart';
 import 'package:fastzone/main.dart';
 import 'package:fastzone/pages/auth/otp_page.dart';
-import 'package:fastzone/pages/profile/register_page.dart';
+import 'package:fastzone/pages/auth/register_page.dart';
 import 'package:fastzone/services/api_client.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,11 +15,24 @@ class AuthController extends GetxController {
   FirebaseAuth get authInstance => _auth;
   RxBool authLoader = RxBool(false);
 
-  Future verifyNumber(String phone) async {
+  Future verifyNumber(String phone, {bool isRegister=false}) async {
      try {
        await FirebaseAuth.instance.verifyPhoneNumber(phoneNumber: '+91 $phone',
         verificationCompleted: (PhoneAuthCredential credential) {
-           authLoader(false); 
+          _auth.signInWithCredential(credential).then((UserCredential credential) {
+            authLoader(false); 
+            LocalX.setId(user.value.id);  
+            LocalX.setFirstName(user.value.firstName);  
+            LocalX.setLastName(user.value.lastName);  
+            LocalX.setEmail(user.value.email);  
+            LocalX.setPhone(user.value.phone);
+            LocalX.setAddressType(user.value.addressType);
+            LocalX.setAddress(user.value.address);
+            LocalX.setLocality(user.value.locality);
+            LocalX.setCity(user.value.city);
+            LocalX.setPincode(user.value.pincode);
+            Get.offAll(() => Home());
+          });
         },
         verificationFailed: (FirebaseAuthException e) {
            authLoader(false);
@@ -28,7 +41,7 @@ class AuthController extends GetxController {
         codeSent: (String verificationId, int? resendToken) async {
           authLoader(false);
           final code = await SmsAutoFill().getAppSignature;
-           debugPrint('verification id $verificationId and coe $code');
+          debugPrint('verification id $verificationId and coe $code');
           Get.to(() => OtpPage(phone: phone, verificationId: verificationId,));
         },
         codeAutoRetrievalTimeout: (String verificationId) {
@@ -43,8 +56,9 @@ class AuthController extends GetxController {
      }
   }
 
+
   RxBool authOtpLoader = RxBool(false);
-  Future signInWithCredentials(PhoneAuthCredential credential) async {
+  Future signInWithCredentials(PhoneAuthCredential credential, {bool isRegister=false}) async {
     try {
       authOtpLoader(true);
       var data = await authInstance.signInWithCredential(credential);
@@ -52,6 +66,7 @@ class AuthController extends GetxController {
           debugPrint('user is ${user.value.firstName}');
           debugPrint('User Credentials');
           authLoader(false);
+          if (isRegister) {
             LocalX.setId(user.value.id);  
             LocalX.setFirstName(user.value.firstName);  
             LocalX.setLastName(user.value.lastName);  
@@ -62,7 +77,8 @@ class AuthController extends GetxController {
             LocalX.setLocality(user.value.locality);
             LocalX.setCity(user.value.city);
             LocalX.setPincode(user.value.pincode);
-            Get.offAll(() => Home());   
+          }
+          Get.offAll(() => Home());   
           // if (user) {
             
           // } else {
@@ -142,7 +158,7 @@ class AuthController extends GetxController {
             LocalX.setLocality(data['data']['locality']);
             LocalX.setCity(data['data']['city']);
             LocalX.setPincode(data['data']['pincode']);
-            await verifyNumber(phone);
+            await verifyNumber(phone, isRegister: true);
          } else {
             Get.defaultDialog(title: 'Registration Failed', 
                 middleText: 'Failed to register. Please try again later.');

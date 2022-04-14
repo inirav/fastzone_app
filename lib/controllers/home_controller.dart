@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter_absolute_path/flutter_absolute_path.dart';
-import 'package:fastzone/main.dart';
 import 'package:fastzone/models/models.dart';
 import 'package:fastzone/services/api_client.dart';
 import 'package:flutter/material.dart';
@@ -67,15 +66,19 @@ class HomeController extends GetxController {
   }
 
 
+  RxBool addIssueLoader = RxBool(false);
   Future addIssue(String title, String desc, int serviceId, int customerId, List<Asset> assets) async {
     try {
+      addIssueLoader(true);
       var files = await convertAssetToFile(media: assets); 
       var data = await ApiClient.raiseIssue(title, desc, serviceId, customerId, files);
       if (data != null) {
          if (data['status'] == true) {
             Get.defaultDialog(title: 'Issue Raised', middleText: 'Issue has been raised successfully.' 
               'we\'ll assign an engineer to your issue soon.', onConfirm: () {
-                Get.offAll(() => Home());
+                Get.back(closeOverlays: true);
+                Get.back();
+                Get.back();
               });
          } else {
             Get.defaultDialog(title: 'Issue Failed', 
@@ -84,6 +87,8 @@ class HomeController extends GetxController {
       }
     } on Exception catch (e) {
       debugPrint(e.toString());
+    } finally {
+      addIssueLoader(false);
     }
   }
 

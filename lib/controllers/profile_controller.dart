@@ -1,6 +1,7 @@
 import 'package:fastzone/data/hive.dart';
 import 'package:fastzone/models/models.dart';
 import 'package:fastzone/services/api_client.dart';
+import 'package:fastzone/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -36,10 +37,8 @@ class ProfileController extends GetxController {
       var data = await ApiClient.deleteIssue(issueId);
       if (data != null) {
          if (data['status'] == true) {
-            Get.defaultDialog(title: 'Issue Deleted', middleText: 'Issue has been deleted successfully.',
-              onConfirm: () {
-                Get.back();
-              });
+           AppSnackBar.defaultSnackBar(title: 'Issue Deleted', message: "Issue has been deleted successfully.",
+              duration: 2);
          } else {
             Get.defaultDialog(title: 'Deletion Failed', 
                 middleText: 'Failed to delete an issue. Please trya again later.');
@@ -47,6 +46,8 @@ class ProfileController extends GetxController {
       }
     } on Exception catch (e) {
       debugPrint(e.toString());
+    }finally{
+      await fetchIssues(LocalX.customerId ?? 0);
     }
   }
 
