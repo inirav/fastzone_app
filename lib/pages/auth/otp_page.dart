@@ -7,10 +7,11 @@ import 'package:get/get.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 
 class OtpPage extends StatefulWidget {
-  const OtpPage({ Key? key, required this.phone, required this.verificationId }) 
+  const OtpPage({ Key? key, required this.phone, required this.verificationId, required this.fromRegister }) 
   : super(key: key);
   final String phone;
   final String verificationId;
+  final bool fromRegister;
   @override
   State<OtpPage> createState() => _OtpPageState();
 }
@@ -83,7 +84,7 @@ class _OtpPageState extends State<OtpPage> {
                               verificationId: widget.verificationId,
                               smsCode: code,
                             );
-                            _authController.signInWithCredentials(credential);
+                            _authController.signInWithCredentials(credential, isRegister: widget.fromRegister);
                           },
                         ),
                       ),
@@ -97,21 +98,8 @@ class _OtpPageState extends State<OtpPage> {
                             verificationId: widget.verificationId,
                             smsCode: code,
                           );
-                          _authController.signInWithCredentials(credential);
+                          _authController.signInWithCredentials(credential, isRegister: widget.fromRegister);
                         }),
-                      // SizedBox(width: double.infinity,
-                      //   child: CupertinoButton(color: AppColors.redColor,
-                      //     child: const Text('Login'),
-                      //     onPressed: () {
-                      //       final code = _otpController.text.trim();
-                      //       PhoneAuthCredential credential =
-                      //           PhoneAuthProvider.credential(
-                      //         verificationId: widget.verificationId,
-                      //         smsCode: code,
-                      //       );
-                      //       _authController.signInWithCredentials(credential);
-                      //     }),
-                      // ),
                     ],
                   ),
                 ),

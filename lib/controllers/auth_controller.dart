@@ -42,7 +42,7 @@ class AuthController extends GetxController {
           authLoader(false);
           final code = await SmsAutoFill().getAppSignature;
           debugPrint('verification id $verificationId and coe $code');
-          Get.to(() => OtpPage(phone: phone, verificationId: verificationId,));
+          Get.to(() => OtpPage(phone: phone, verificationId: verificationId, fromRegister: isRegister,));
         },
         codeAutoRetrievalTimeout: (String verificationId) {
           debugPrint('verification timed out'); 
@@ -66,7 +66,7 @@ class AuthController extends GetxController {
           debugPrint('user is ${user.value.firstName}');
           debugPrint('User Credentials');
           authLoader(false);
-          if (isRegister) {
+          if (isRegister == false) {
             LocalX.setId(user.value.id);  
             LocalX.setFirstName(user.value.firstName);  
             LocalX.setLastName(user.value.lastName);  
