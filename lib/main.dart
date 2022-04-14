@@ -1,13 +1,14 @@
 import 'package:fastzone/data/hive.dart';
 import 'package:fastzone/pages/home_page.dart';
 import 'package:fastzone/pages/profile/profile_page.dart';
+import 'package:fastzone/utils/onesignal.dart';
 import 'package:fastzone/utils/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-
+// ${applicationName}
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -15,7 +16,7 @@ void main() async {
       const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   await Firebase.initializeApp();
   await loadHive();
-  // await setupOneSignal();
+  await setupOneSignal();
   runApp(const MyApp());
 }
 

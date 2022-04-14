@@ -1,7 +1,7 @@
 
 class Connection {
 
-  static String url = 'http://192.168.1.100:8000'; 
+  static String url = 'http://192.168.1.101:8000'; 
 
   static String checkCustomer = url + '/users/api/customer/check';
   static String addCustomer = url + '/users/api/customer/add';
@@ -12,5 +12,8 @@ class Connection {
   static String allIssues = url + '/api/issues';
   static String addIssue = url + '/api/issue/add';
   static String deleteIssue = url + '/api/issue/delete';
+
+  static String privacy = url + '/privacy-policy';
+  static String terms = url + '/terms-and-conditions';
 
 }

@@ -48,6 +48,7 @@ dependencies:
   multi_image_picker2: ^5.0.2
   sms_autofill: ^2.2.0
   otp_autofill: ^2.1.0  
+  url_launcher: ^6.0.20
 
 dev_dependencies:
   flutter_test:

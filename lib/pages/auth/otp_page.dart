@@ -7,7 +7,8 @@ import 'package:get/get.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 
 class OtpPage extends StatefulWidget {
-  const OtpPage({ Key? key, required this.phone, required this.verificationId }) : super(key: key);
+  const OtpPage({ Key? key, required this.phone, required this.verificationId }) 
+    : super(key: key);
   final String phone;
   final String verificationId;
 

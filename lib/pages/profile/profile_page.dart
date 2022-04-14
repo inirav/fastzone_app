@@ -2,9 +2,12 @@ import 'package:fastzone/data/hive.dart';
 import 'package:fastzone/pages/auth/login_page.dart';
 import 'package:fastzone/pages/profile/edit_profile_page.dart';
 import 'package:fastzone/pages/profile/issues_page.dart';
+import 'package:fastzone/services/connection.dart';
+import 'package:fastzone/utils/snackbar.dart';
 import 'package:fastzone/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -79,7 +82,7 @@ class ProfileListView extends StatelessWidget {
       itemCount: _titles.length,
       itemBuilder: (c, i) {
         return ListTile(
-          title: Text(_titles[i], style: const TextStyle(fontFamily: 'clan'),),
+          title: Text(_titles[i]),
           leading: Container(width: 45, height: 45,
             decoration: BoxDecoration(
               color: AppColors.lightGreyColor,
@@ -90,14 +93,28 @@ class ProfileListView extends StatelessWidget {
           ),
           trailing: const Icon(Icons.chevron_right, color: Colors.grey),
           onTap: () {
-            if (i == 0) {
-              Get.to(() => const EditProfilePage());
-            } else if (i == 1) {
-              Get.to(() => const IssuePage());
-            } else if (i == 5) {
-              LocalX.userBox().clear();
-              Get.offAll(() => const LoginPage());
-            } 
+            switch (i) {
+              case 0:
+                Get.to(() => const EditProfilePage());
+                break;
+              case 1:  
+                Get.to(() => const IssuePage());
+                break;
+              case 2:
+                _launchTerms();
+                break;    
+              case 3:
+                _launchPrivacy();
+                break;  
+              case 5:
+                LocalX.userBox().clear();
+                Get.offAll(() => const LoginPage());
+                break;
+              default: 
+                AppSnackBar.defaultSnackBar(title: 'Invalid Selection', 
+                message: "Please select any other option.", duration: 3);
+                break; 
+            }
           },
         );
       },
@@ -106,4 +123,13 @@ class ProfileListView extends StatelessWidget {
       },
     );
   }
+
+  _launchPrivacy() async {
+      if (!await launch(Connection.privacy)) throw 'Could not launch ${Connection.privacy}';
+  }
+
+  _launchTerms() async {
+      if (!await launch(Connection.terms)) throw 'Could not launch ${Connection.terms}';
+  }
+
 }

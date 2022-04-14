@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:fastzone/data/appkeys.dart';
+import 'package:fastzone/data/hive.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:flutter/foundation.dart';
 
@@ -27,6 +28,13 @@ Future<void> setupOneSignal() async {
   //   // will be called whenever a notification is received
   //   debugPrint("setNotificationReceivedHandler");
   // });
+
+  var externalId = LocalX.customerId ?? 0;
+  OneSignal.shared.setExternalUserId('$externalId').then((results) {
+    debugPrint(results.toString());
+  }).catchError((error) {
+    debugPrint(error.toString());
+  });
 
   OneSignal.shared.setNotificationOpenedHandler((OSNotificationOpenedResult result) {
     // will be called whenever a notification is opened/button pressed.
