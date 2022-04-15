@@ -1,3 +1,4 @@
+
 import 'package:fastzone/data/hive.dart';
 import 'package:fastzone/pages/auth/login_page.dart';
 import 'package:fastzone/pages/profile/edit_profile_page.dart';
@@ -22,12 +23,19 @@ class ProfilePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Text('Login to view profile', style: AppTheme.head2,),
+              const SizedBox(height: 14,),
               ElevatedButton(
-                child: const Text('Login'),
+                child: Text('Login', style: AppTheme.head2,), 
+                style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith((states) {
+                  if (states.contains(MaterialState.pressed)) {
+                      return AppColors.redColor;
+                    }
+                    return AppColors.redColor;
+                })),
                 onPressed: () {
                   Get.offAll(() => const LoginPage());
-                },
-              ),
+                },),
             ],
           ),
         ) :

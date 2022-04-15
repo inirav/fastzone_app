@@ -27,7 +27,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final TextEditingController _pincodeController = TextEditingController();
   final AuthController _authController = Get.put<AuthController>(AuthController());
 
-  String dropDownValue = 'Home';   
+
+  String dropDownValue = LocalX.addressType ?? 'Home';
   List<String> dropDownItems = [    
     'Home',
     'Industrial',
@@ -44,6 +45,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     _localityController.text = '${LocalX.locality}';
     _cityController.text = '${LocalX.city}';
     _pincodeController.text = '${LocalX.pincode}';
+    dropDownValue = LocalX.addressType ?? 'Home';
     super.initState();
   }
 

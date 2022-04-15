@@ -12,7 +12,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Fastzone')),
+      appBar: AppBar(title: Image.asset('assets/logowhite.png', fit: BoxFit.contain, height: 45,)),
       body: GetX<HomeController>(
         init: HomeController(),
         builder: (controller) {

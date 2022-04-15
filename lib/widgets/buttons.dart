@@ -43,11 +43,8 @@ class MyButton extends StatelessWidget {
                 )
               : Text(
                   isLoading ? "" : title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
-                    fontSize: 17,
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.w500,
+                    color: Colors.white, fontSize: 17),
                 ),
           ),
         ),

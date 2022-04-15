@@ -70,6 +70,7 @@ class HomeController extends GetxController {
   Future addIssue(String title, String desc, int serviceId, int customerId, List<Asset> assets) async {
     try {
       addIssueLoader(true);
+      debugPrint('value of loader ${addIssueLoader.value}');
       var files = await convertAssetToFile(media: assets); 
       var data = await ApiClient.raiseIssue(title, desc, serviceId, customerId, files);
       if (data != null) {
@@ -79,7 +80,7 @@ class HomeController extends GetxController {
                 Get.back(closeOverlays: true);
                 Get.back();
                 Get.back();
-              });
+            });
          } else {
             Get.defaultDialog(title: 'Issue Failed', 
                 middleText: 'Failed to raise an issue. Please trya again later.');
