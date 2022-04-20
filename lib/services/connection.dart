@@ -1,7 +1,7 @@
 
 class Connection {
 
-  static String url = 'http://192.168.1.101:8000'; 
+  static String url = 'http://fastzone.in'; 
 
   static String checkCustomer = url + '/users/api/customer/check';
   static String addCustomer = url + '/users/api/customer/add';

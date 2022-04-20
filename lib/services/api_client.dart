@@ -8,13 +8,13 @@ import 'package:fastzone/models/models.dart';
 
 class ApiClient {
 
-  static Future addCustomer(String firstName, String lastName,
+  static Future addCustomer(String fullName, String organization,
      String email, String phone, String type, String address, String locality, 
      String city, String pincode) async {
     try {
         var response = await http.post(Uri.parse(Connection.addCustomer), body: {
-          'first_name': firstName,
-          'last_name': lastName,
+          'full_name': fullName,
+          'organization': organization,
           'email': email,
           'phone': phone,
           'type': type,
@@ -25,6 +25,7 @@ class ApiClient {
         });
         if (response.statusCode >= 200 || response.statusCode <= 299) {
           var result = json.decode(response.body);
+          debugPrint('register customer $result');
           return result;
         }  
     } on Exception catch (e) {
@@ -33,14 +34,14 @@ class ApiClient {
   }
 
 
-  static Future editCustomer(int customerId, String firstName, String lastName,
+  static Future editCustomer(int customerId, String fullName, String organization,
      String email, String phone, String type, String address, String locality, 
      String city, String pincode) async {
     try {
         var response = await http.post(Uri.parse(Connection.editCustomer), body: {
           'customer_id': '$customerId',
-          'first_name': firstName,
-          'last_name': lastName,
+          'full_name': fullName,
+          'organization': organization,
           'email': email,
           'phone': phone,
           'type': type,

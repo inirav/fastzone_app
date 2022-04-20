@@ -3,8 +3,8 @@
 class Customer {
     Customer({
        required this.id,
-       required this.firstName,
-       required this.lastName,
+       required this.fullName,
+       required this.organization,
        required this.email,
        required this.phone,
        required this.addressType,
@@ -15,8 +15,8 @@ class Customer {
     });
 
     int id;
-    String firstName;
-    String lastName;
+    String fullName;
+    String organization;
     String email;
     String phone;
     String addressType;
@@ -27,8 +27,8 @@ class Customer {
 
     factory Customer.fromJson(Map<String, dynamic> json) => Customer(
         id: json["id"],
-        firstName: json["first_name"],
-        lastName: json["last_name"],
+        fullName: json["full_name"],
+        organization: json["organization"],
         email: json["email"],
         phone: json["phone"],
         addressType: json["address_type"],

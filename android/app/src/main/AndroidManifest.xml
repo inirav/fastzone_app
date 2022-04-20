@@ -14,7 +14,7 @@
     </queries>
 
    <application
-        android:label="fastzone"
+        android:label="Fastzone"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
        tools:ignore="MissingClass">

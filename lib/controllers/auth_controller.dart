@@ -3,6 +3,7 @@ import 'package:fastzone/main.dart';
 import 'package:fastzone/pages/auth/otp_page.dart';
 import 'package:fastzone/pages/auth/register_page.dart';
 import 'package:fastzone/services/api_client.dart';
+import 'package:fastzone/utils/onesignal.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,11 +20,11 @@ class AuthController extends GetxController {
      try {
        await FirebaseAuth.instance.verifyPhoneNumber(phoneNumber: '+91 $phone',
         verificationCompleted: (PhoneAuthCredential credential) {
-          _auth.signInWithCredential(credential).then((UserCredential credential) {
+          _auth.signInWithCredential(credential).then((UserCredential credential) async {
             authLoader(false); 
             LocalX.setId(user.value.id);  
-            LocalX.setFirstName(user.value.firstName);  
-            LocalX.setLastName(user.value.lastName);  
+            LocalX.setFullName(user.value.fullName);  
+            LocalX.setOrganization(user.value.organization);  
             LocalX.setEmail(user.value.email);  
             LocalX.setPhone(user.value.phone);
             LocalX.setAddressType(user.value.addressType);
@@ -31,6 +32,7 @@ class AuthController extends GetxController {
             LocalX.setLocality(user.value.locality);
             LocalX.setCity(user.value.city);
             LocalX.setPincode(user.value.pincode);
+            await setupOneSignal();
             Get.offAll(() => Home());
           });
         },
@@ -63,13 +65,13 @@ class AuthController extends GetxController {
       authOtpLoader(true);
       var data = await authInstance.signInWithCredential(credential);
       if (data.user != null) {
-          debugPrint('user is ${user.value.firstName}');
+          debugPrint('user is ${user.value.fullName}');
           debugPrint('User Credentials');
           authLoader(false);
           if (isRegister == false) {
             LocalX.setId(user.value.id);  
-            LocalX.setFirstName(user.value.firstName);  
-            LocalX.setLastName(user.value.lastName);  
+            LocalX.setFullName(user.value.fullName);  
+            LocalX.setOrganization(user.value.organization);  
             LocalX.setEmail(user.value.email);  
             LocalX.setPhone(user.value.phone);
             LocalX.setAddressType(user.value.addressType);
@@ -98,7 +100,7 @@ class AuthController extends GetxController {
     }
   }
 
-  Rx<Customer> user = Rx<Customer>(Customer(id: 0, firstName: '', lastName: '', 
+  Rx<Customer> user = Rx<Customer>(Customer(id: 0, fullName: '', organization: '', 
       email: '', phone: '', address: '', addressType: '', city: '', locality: '',
       pincode: ''));
   Future checkCustomer(String phone) async {
@@ -110,12 +112,12 @@ class AuthController extends GetxController {
         if (data['status'] == true) {
           customer = Customer.fromJson(data['data']);  
           user.value = customer;
-          debugPrint('customer json data ${customer.firstName}');
+          debugPrint('customer json data ${customer.fullName}');
           if (int.parse(phone) == 9898685149) {
             authLoader(false);
             LocalX.setId(customer.id);  
-            LocalX.setFirstName(customer.firstName);  
-            LocalX.setLastName(customer.lastName);  
+            LocalX.setFullName(customer.fullName);  
+            LocalX.setOrganization(customer.organization);  
             LocalX.setEmail(customer.email);  
             LocalX.setPhone(customer.phone);
             LocalX.setAddressType(customer.addressType);
@@ -141,16 +143,19 @@ class AuthController extends GetxController {
     }
   }
 
-  Future addCustomer(String firstName, String lastName,
+  RxBool addCustomerLoader = RxBool(false);
+  Future addCustomer(String fullName, String organization,
      String email, String phone, String type, String address, String locality, 
      String city, String pincode) async {
     try {
-      var data = await ApiClient.addCustomer(firstName, lastName, email, phone, type, address, locality, city, pincode);
+      addCustomerLoader(true);
+      var data = await ApiClient.addCustomer(fullName, organization, email, phone, type, 
+          address, locality, city, pincode);
       if (data != null) {
          if (data['status'] == true) {
             LocalX.setId(data['data']['id']);
-            LocalX.setFirstName(data['data']['first_name']);  
-            LocalX.setLastName(data['data']['last_name']);  
+            LocalX.setFullName(data['data']['full_name']);  
+            LocalX.setOrganization(data['data']['organization'] ?? '');  
             LocalX.setEmail(data['data']['email']);  
             LocalX.setPhone(data['data']['phone']);
             LocalX.setAddressType(data['data']['address_type']);
@@ -158,27 +163,34 @@ class AuthController extends GetxController {
             LocalX.setLocality(data['data']['locality']);
             LocalX.setCity(data['data']['city']);
             LocalX.setPincode(data['data']['pincode']);
+            addCustomerLoader(false);
             await verifyNumber(phone, isRegister: true);
          } else {
+           addCustomerLoader(false);
             Get.defaultDialog(title: 'Registration Failed', 
                 middleText: 'Failed to register. Please try again later.');
          }
       }
     } on Exception catch (e) {
       debugPrint(e.toString());
+    } finally {
+      addCustomerLoader(false);
     }
   }
   
 
-  Future editCustomer(int customerId, String firstName, String lastName,
+  RxBool editCustomerLoader = RxBool(false);
+  Future editCustomer(int customerId, String fullName, String organization,
     String email, String phone, String type, String address, String locality, 
     String city, String pincode) async {
     try {
-      var data = await ApiClient.editCustomer(customerId, firstName, lastName, email, phone, type, address, locality, city, pincode);
+      editCustomerLoader(true);
+      var data = await ApiClient.editCustomer(customerId, fullName, organization, email, 
+          phone, type, address, locality, city, pincode);
       if (data != null) {
         if (data['status'] == true) {
-            LocalX.setFirstName(firstName);  
-            LocalX.setLastName(lastName);  
+            LocalX.setFullName(fullName);  
+            LocalX.setOrganization(organization);  
             LocalX.setEmail(email);  
             LocalX.setPhone(phone);
             LocalX.setAddressType(type);
@@ -186,17 +198,22 @@ class AuthController extends GetxController {
             LocalX.setLocality(locality);
             LocalX.setCity(city);
             LocalX.setPincode(pincode);
-            Get.defaultDialog(title: 'Profile Updated', middleText: 'Profile has been updated successfully.', 
+            editCustomerLoader(false);
+            Get.defaultDialog(title: 'Profile Updated', 
+              middleText: 'Profile has been updated successfully.', 
               onConfirm: () {
-                Get.back();
+                Get.back(closeOverlays: true);
               });
         } else {
+            editCustomerLoader(false);
             Get.defaultDialog(title: 'Update Failed', 
                 middleText: 'Failed to update profile. Please try again later.');
          }
       }
     } on Exception catch (e) {
       debugPrint(e.toString());
+    } finally {
+      editCustomerLoader(false);
     }
   }
 

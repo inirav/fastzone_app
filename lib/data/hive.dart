@@ -20,11 +20,11 @@ class LocalX {
   static setId(int customerId) => userBox().put('id', customerId);
   static int? get customerId => userBox().get('id');
 
-  static setFirstName(String firstName) => userBox().put('firstname', firstName);
-  static String? get firstName => userBox().get('firstname');
+  static setFullName(String fullName) => userBox().put('fullname', fullName);
+  static String? get fullName => userBox().get('fullname');
 
-  static setLastName(String lastName) => userBox().put('lastname', lastName);
-  static String? get lastName => userBox().get('lastname');
+  static setOrganization(String organization) => userBox().put('organization', organization);
+  static String? get organization => userBox().get('organization');
 
   static setEmail(String email) => userBox().put('email', email);
   static String? get email => userBox().get('email');

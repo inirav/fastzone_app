@@ -44,7 +44,7 @@ class ProfilePage extends StatelessWidget {
           physics: const BouncingScrollPhysics(),
           children: <Widget>[
             const SizedBox(height: 25),
-            Text('${LocalX.firstName} ${LocalX.lastName}', style: const TextStyle(fontSize: 24, 
+            Text('${LocalX.fullName}', style: const TextStyle(fontSize: 24, 
                 fontWeight: FontWeight.w500),),
             const SizedBox(height: 6),
             Text('${LocalX.email}', style: const TextStyle(

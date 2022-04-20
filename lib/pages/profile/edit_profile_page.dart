@@ -2,6 +2,7 @@ import 'package:fastzone/controllers/auth_controller.dart';
 import 'package:fastzone/data/hive.dart';
 import 'package:fastzone/utils/theme.dart';
 import 'package:fastzone/utils/validator.dart';
+import 'package:fastzone/widgets/buttons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,8 +18,8 @@ class EditProfilePage extends StatefulWidget {
 
 class _EditProfilePageState extends State<EditProfilePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _orgNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
@@ -28,31 +29,47 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final AuthController _authController = Get.put<AuthController>(AuthController());
 
 
-  String dropDownValue = LocalX.addressType ?? 'Home';
-  List<String> dropDownItems = [    
-    'Home',
-    'Industrial',
-    'Government'
-  ];
+   int selectedValue = 0;
 
   @override
   void initState() {
-    _firstNameController.text = '${LocalX.firstName}';
-    _lastNameController.text = '${LocalX.lastName}';
+    _fullNameController.text = '${LocalX.fullName}';
+    _orgNameController.text = '${LocalX.organization}';
     _emailController.text = '${LocalX.email}';
     _phoneController.text = '${LocalX.phone}';
     _addressController.text = '${LocalX.address}';
     _localityController.text = '${LocalX.locality}';
     _cityController.text = '${LocalX.city}';
     _pincodeController.text = '${LocalX.pincode}';
-    dropDownValue = LocalX.addressType ?? 'Home';
+    _selectAddressType();
+   // dropDownValue = LocalX.addressType ?? 'Home';
     super.initState();
+  }
+
+  _selectAddressType() {
+    String addressType = '${LocalX.addressType}';
+    setState(() {
+      switch (addressType) {
+      case 'Home':
+        selectedValue = 0;
+        break;
+      case 'Industry':
+        selectedValue = 1;
+        break;
+      case 'Govt':
+        selectedValue = 2;
+        break;
+      default:
+        selectedValue = 0;
+        break;      
+    }
+    });
   }
 
   @override
   void dispose() {
-    _firstNameController.dispose();
-    _lastNameController.dispose();
+    _fullNameController.dispose();
+    _orgNameController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
     _addressController.dispose();
@@ -74,33 +91,56 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 20,),
-                    Text('First Name', style: Theme.of(context).textTheme.headline6,),
-                    const SizedBox(height: 8,),
-                    TextFormField(
-                      controller: _firstNameController,
-                      validator: Validator.validateName,
-                      style: const TextStyle(color: Colors.black87),
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-                        hintText: 'First Name',
-                        hintStyle: AppTheme.head1,
-                        border: const OutlineInputBorder(),
-                      ),
+                  Text('Address Type', style: Theme.of(context).textTheme.headline6,),
+                  const SizedBox(height: 8,),
+                  SizedBox(width: double.infinity,
+                    child: CupertinoSlidingSegmentedControl(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      children: const <int, Widget>{
+                        0: Text('Home', style: TextStyle(fontSize: 16),),
+                        1: Text('Industry', style: TextStyle(fontSize: 16),),
+                        2: Text('Govt', style: TextStyle(fontSize: 16),),
+                      }, 
+                      onValueChanged: (int? val) {
+                        setState(() {
+                          selectedValue = val!;
+                        }); 
+                      }, groupValue: selectedValue,),
+                  ),
+                  const SizedBox(height: 20,),
+                  Text('Full Name', style: Theme.of(context).textTheme.headline6,),
+                  const SizedBox(height: 8,),
+                  TextFormField(
+                    controller: _fullNameController,
+                    validator: Validator.validateName,
+                    style: const TextStyle(color: Colors.black87),
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                      hintText: 'Full Name',
+                      hintStyle: AppTheme.head1,
+                      border: const OutlineInputBorder(),
                     ),
-                    const SizedBox(height: 30,),
-                    Text('Last Name', style: Theme.of(context).textTheme.headline6,),
-                    const SizedBox(height: 8,),
-                    TextFormField(
-                      controller: _lastNameController,
-                      validator: Validator.validateName,
-                      style: const TextStyle(color: Colors.black87),
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-                        hintText: 'Last Name',
-                        hintStyle: AppTheme.head1,
-                        border: const OutlineInputBorder(),
+                  ),
+                  selectedValue == 0 ?
+                  const SizedBox() :
+                  Column(crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 30,),
+                      Text('Organization', style: Theme.of(context).textTheme.headline6,),
+                      const SizedBox(height: 8,),
+                      TextFormField(
+                        controller: _orgNameController,
+                        validator: Validator.validateName,
+                        style: const TextStyle(color: Colors.black87),
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                          hintText: 'Organization',
+                          hintStyle: AppTheme.head1,
+                          border: const OutlineInputBorder(),
+                        ),
                       ),
-                    ),
+                    ],
+                  ),
                 const SizedBox(height: 30,),
                 Text('Email Address', style: Theme.of(context).textTheme.headline6,),
                 const SizedBox(height: 8,),
@@ -134,24 +174,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     hintStyle: AppTheme.head1,
                     border: const OutlineInputBorder(),
                   ),
-                ),
-                const SizedBox(height: 16,),
-                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Address Type', style: Theme.of(context).textTheme.headline6,),
-                    DropdownButton(items: dropDownItems.map((String items) {
-                      return DropdownMenuItem(
-                          value: items,
-                          child: Text(items),
-                        );
-                      }).toList(), 
-                      value: dropDownValue,
-                      onChanged: (String? value) {
-                        setState(() {
-                            dropDownValue = value!;
-                        });
-                    }),
-                  ],
                 ),
                 const SizedBox(height: 16,),
                 Text('Address', style: Theme.of(context).textTheme.headline6,),
@@ -215,17 +237,33 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   ),
                 ),
                 const SizedBox(height: 30,),
-                SizedBox(width: double.infinity,
-                child: CupertinoButton(
-                  color: AppColors.redColor,
-                  child: Text('Submit', style: AppTheme.head1),
-                  onPressed: () {
-                    _authController.editCustomer(LocalX.customerId ?? 0, _firstNameController.text, 
-                      _lastNameController.text, _emailController.text, _phoneController.text,
-                      dropDownValue, _addressController.text, _localityController.text,
-                      _cityController.text, _pincodeController.text);
-                  }),
-              ),
+                Obx(() => MyButton(
+                  width: Get.width / 1.1,
+                  title: 'Submit',
+                  isLoading: _authController.editCustomerLoader.value,
+                  onTap: () async {
+                    String addressType = 'Home';
+                    switch (selectedValue) {
+                      case 0:
+                        addressType = 'Home';
+                        break;
+                      case 1:
+                        addressType = 'Industry';
+                        break;
+                      case 2:
+                        addressType = 'Govt';
+                        break;
+                      default:
+                        addressType = 'Home';
+                        break;      
+                    }
+                    if (_formKey.currentState!.validate()) {
+                       _authController.editCustomer(LocalX.customerId ?? 0, _fullNameController.text, 
+                       _orgNameController.text, _emailController.text, _phoneController.text,
+                       addressType, _addressController.text, _localityController.text,
+                       _cityController.text, _pincodeController.text);
+                    }
+                  })),
             ],  
           ),
         ),
