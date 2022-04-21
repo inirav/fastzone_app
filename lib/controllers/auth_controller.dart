@@ -3,10 +3,10 @@ import 'package:fastzone/main.dart';
 import 'package:fastzone/pages/auth/otp_page.dart';
 import 'package:fastzone/pages/auth/register_page.dart';
 import 'package:fastzone/services/api_client.dart';
-import 'package:fastzone/utils/onesignal.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 import 'package:fastzone/models/models.dart';
 
@@ -32,7 +32,13 @@ class AuthController extends GetxController {
             LocalX.setLocality(user.value.locality);
             LocalX.setCity(user.value.city);
             LocalX.setPincode(user.value.pincode);
-            await setupOneSignal();
+            // set onesignal external id
+            var externalId = LocalX.customerId ?? 0;
+            OneSignal.shared.setExternalUserId('$externalId').then((results) {
+              debugPrint(results.toString());
+            }).catchError((error) {
+              debugPrint(error.toString());
+            });
             Get.offAll(() => Home());
           });
         },
@@ -80,6 +86,13 @@ class AuthController extends GetxController {
             LocalX.setCity(user.value.city);
             LocalX.setPincode(user.value.pincode);
           }
+          // set onesignal external id
+          var externalId = LocalX.customerId ?? 0;
+          OneSignal.shared.setExternalUserId('$externalId').then((results) {
+            debugPrint(results.toString());
+          }).catchError((error) {
+            debugPrint(error.toString());
+          });
           Get.offAll(() => Home());   
           // if (user) {
             
