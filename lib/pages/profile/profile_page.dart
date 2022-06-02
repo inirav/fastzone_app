@@ -8,6 +8,7 @@ import 'package:fastzone/utils/snackbar.dart';
 import 'package:fastzone/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -68,6 +69,7 @@ class ProfileListView extends StatelessWidget {
   final List<String> _titles = [
     'Edit Profile',
     'All Issues',
+    'Call Helpline',
     'Terms & Conditions',
     'Privacy Policy',
     'Share this App',
@@ -76,6 +78,7 @@ class ProfileListView extends StatelessWidget {
   final List<IconData> _profileIcons = [
     Icons.edit,
     Icons.list,
+    Icons.phone,
     Icons.list,
     Icons.security,
     Icons.share,
@@ -108,13 +111,21 @@ class ProfileListView extends StatelessWidget {
               case 1:  
                 Get.to(() => const IssuePage());
                 break;
-              case 2:
+              case 2:  
+                _launchCallHelpline();
+                break;
+              case 3:
                 _launchTerms();
                 break;    
-              case 3:
+              case 4:
                 _launchPrivacy();
                 break;  
               case 5:
+                Share.share('Checkout this awesome app called Fastzone for all types of' 
+                  'repairs and service solutions. Download from the Playstore now. ' 
+                  'https://play.google.com/store/apps/details?id=com.we3tech.fastzone');
+                break;  
+              case 6:
                 LocalX.userBox().clear();
                 Get.offAll(() => const LoginPage());
                 break;
@@ -130,6 +141,10 @@ class ProfileListView extends StatelessWidget {
         return const Divider(color: Colors.grey, indent: 15);
       },
     );
+  }
+
+  _launchCallHelpline() async {
+      if (!await launch('tel:+917433800080')) throw 'Could not launch helpline no.';
   }
 
   _launchPrivacy() async {

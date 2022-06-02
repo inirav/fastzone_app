@@ -49,6 +49,7 @@ dependencies:
   sms_autofill: ^2.2.0
   otp_autofill: ^2.1.0  
   url_launcher: ^6.0.20
+  share_plus: ^4.0.5
 
 dev_dependencies:
   flutter_test:

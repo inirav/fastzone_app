@@ -24,7 +24,7 @@ class AuthController extends GetxController {
             authLoader(false); 
             LocalX.setId(user.value.id);  
             LocalX.setFullName(user.value.fullName);  
-            LocalX.setOrganization(user.value.organization);  
+            LocalX.setOrganization(user.value.organization ?? '');  
             LocalX.setEmail(user.value.email);  
             LocalX.setPhone(user.value.phone);
             LocalX.setAddressType(user.value.addressType);
@@ -77,7 +77,7 @@ class AuthController extends GetxController {
           if (isRegister == false) {
             LocalX.setId(user.value.id);  
             LocalX.setFullName(user.value.fullName);  
-            LocalX.setOrganization(user.value.organization);  
+            LocalX.setOrganization(user.value.organization ?? '');  
             LocalX.setEmail(user.value.email);  
             LocalX.setPhone(user.value.phone);
             LocalX.setAddressType(user.value.addressType);
@@ -130,7 +130,7 @@ class AuthController extends GetxController {
             authLoader(false);
             LocalX.setId(customer.id);  
             LocalX.setFullName(customer.fullName);  
-            LocalX.setOrganization(customer.organization);  
+            LocalX.setOrganization(customer.organization ?? '');  
             LocalX.setEmail(customer.email);  
             LocalX.setPhone(customer.phone);
             LocalX.setAddressType(customer.addressType);

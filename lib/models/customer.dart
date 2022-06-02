@@ -4,7 +4,7 @@ class Customer {
     Customer({
        required this.id,
        required this.fullName,
-       required this.organization,
+       this.organization,
        required this.email,
        required this.phone,
        required this.addressType,
@@ -16,7 +16,7 @@ class Customer {
 
     int id;
     String fullName;
-    String organization;
+    String? organization;
     String email;
     String phone;
     String addressType;

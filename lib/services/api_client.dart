@@ -68,6 +68,7 @@ class ApiClient {
       });
       if (response.statusCode >= 200 || response.statusCode <= 299) {
         var result = json.decode(response.body);
+        debugPrint('api result $result');
         return result;
       }  
     } on Exception catch (e) {

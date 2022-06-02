@@ -64,43 +64,30 @@ class _IssuePageState extends State<IssuePage> {
                   border: const OutlineInputBorder(),
                 ),
               ),
-              const SizedBox(
-                height: 30,
-              ),
-              Text(
-                'Issue Description',
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              TextFormField(
-                maxLines: 7,
+              const SizedBox(height: 30),
+              Text('Issue Description',
+                style: Theme.of(context).textTheme.headline6),
+              const SizedBox(height: 8),
+              TextFormField(maxLines: 7,
                 controller: _descController,
                 decoration: InputDecoration(
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   hintText: 'Issue Description',
                   hintStyle: AppTheme.head1,
                   border: const OutlineInputBorder(),
                 ),
               ),
-              const SizedBox(
-                height: 15,
-              ),
+              const SizedBox(height: 14),
+              const Text('(You can optionally add images for detailing)', 
+                style: TextStyle(color: Colors.grey, fontSize: 16),),
+              const SizedBox(height: 4),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Add Images',
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
+                  Text('Add Images', style: Theme.of(context).textTheme.headline6,),
                   ElevatedButton.icon(
                     icon: const Icon(Icons.add),
-                    label: Text(
-                      'Add',
-                      style: AppTheme.head2,
-                    ),
+                    label: Text('Add', style: AppTheme.head2),
                     style: ButtonStyle(backgroundColor:
                         MaterialStateProperty.resolveWith((states) {
                       if (states.contains(MaterialState.pressed)) {
@@ -114,24 +101,20 @@ class _IssuePageState extends State<IssuePage> {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 12,
-              ),
+              const SizedBox(height: 12),
               _imagesGridView(),
-              const SizedBox(
-                height: 30,
-              ),
+              const SizedBox(height: 30),
               Obx(() => MyButton(
-                  width: Get.width / 1.1,
-                  title: 'Raise Issue',
-                  isLoading: homeController.addIssueLoader.value,
-                  onTap: () {
-                    if (_formKey.currentState!.validate()) {
-                        homeController.addIssue(_titleController.text,
-                          _descController.text, widget.serviceId, LocalX.customerId ?? 0, 
-                          _images);
-                    }
-                  })),
+                width: Get.width / 1.1,
+                title: 'Raise Issue',
+                isLoading: homeController.addIssueLoader.value,
+                onTap: () {
+                  if (_formKey.currentState!.validate()) {
+                      homeController.addIssue(_titleController.text,
+                        _descController.text, widget.serviceId, LocalX.customerId ?? 0, 
+                        _images);
+                  }
+                })),
             ],
           ),
         ),

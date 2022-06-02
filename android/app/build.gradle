@@ -60,8 +60,8 @@ android {
         applicationId "com.we3tech.fastzone"
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+        versionCode 2
+        versionName '1.0.1'
         multiDexEnabled true
     }
 
